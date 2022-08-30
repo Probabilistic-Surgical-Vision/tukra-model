@@ -181,7 +181,7 @@ def main(gpu_index: int, args: argparse.Namespace) -> None:
         disc_loss_function = None
 
     if args.finetune_from is not None:
-        state_dict = torch.load(args.finetune_from)
+        state_dict = torch.load(args.finetune_from, map_location=device)
 
         if disc is not None:
             model_state = state_dict['model']

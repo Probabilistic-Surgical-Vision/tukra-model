@@ -15,8 +15,8 @@ from torchvision.utils import make_grid
 # Type hint definitions
 Device = Union[torch.device, str]
 ImagePyramid = List[Tensor]
-LRAdjuster = Callable[[Optimizer, int, float, bool], None]
-ScaleAdjuster = Callable[[int], float]
+LRAdjuster = Callable[[Optimizer, int, float], None]
+ScaleAdjuster = Callable[[int, bool], float]
 Loss = List[float]
 
 def l1_loss(x: Tensor, y: Tensor) -> Tensor:
@@ -140,10 +140,9 @@ def concatenate_pyramids(a: ImagePyramid, b: ImagePyramid) -> ImagePyramid:
     return [torch.cat((x, y), 0) for x, y in zip(a, b)]
 
 
-def adjust_disparity(epoch: int, m: float = 0.02, c: float = 0.0,
-                     step: float = 0.2, offset: float = 0.1,
-                     min_scale: float = 0.3,
-                     max_scale: float = 1.0) -> float:
+def adjust_disparity(epoch: int, finetune: bool = False, m: float = 0.02,
+                     c: float = 0.0, step: float = 0.2, offset: float = 0.1,
+                     min_scale: float = 0.3, max_scale: float = 1.0) -> float:
     """Calculate the disparity scaling of the model given the epoch number.
 
     The scale is calculated based on a linear equation y = mx + c, where:
@@ -166,6 +165,9 @@ def adjust_disparity(epoch: int, m: float = 0.02, c: float = 0.0,
     Returns:
         float: The disparity scale.
     """
+    if finetune:
+        return min_scale
+
     # Transform epoch to continuous scale using m and c
     scale = ((epoch + 1) * m) + c
     # Quantise to fit the grid defined by step and offset
@@ -330,8 +332,7 @@ def prepare_state_dict(state_dict: OrderedDict) -> dict:
     return {k.replace("module.", ""): v for k, v in state_dict.items()}
 
 
-def adjust_learning_rate(optimiser: Optimizer, epoch: int, lr: float,
-                         finetune: bool = False) -> None:
+def adjust_learning_rate(optimiser: Optimizer, epoch: int, lr: float) -> None:
     """Halve and quarter the learning rate at 30 and 40 epochs respectively.
 
     Code adapted from:
@@ -342,7 +343,7 @@ def adjust_learning_rate(optimiser: Optimizer, epoch: int, lr: float,
         epoch (int): The current epoch number.,
         lr (float): The initial learning rate.
     """
-    if epoch > 40 or finetune:
+    if epoch > 40:
         target_learning_rate = lr / 4
     elif epoch > 30:
         target_learning_rate = lr / 2

@@ -228,7 +228,7 @@ def train_model(model: Module, loader: DataLoader, loss_function: Module,
 
     for i in range(epochs):
         adjust_learning_rate(model_optimiser, i, learning_rate)
-        scale = 1 if finetune else adjust_disparity(i)
+        scale = adjust_disparity(i, finetune)
 
         loss = train_one_epoch(model, loader, loss_function, model_optimiser,
                                scale, disc, disc_optimiser,
