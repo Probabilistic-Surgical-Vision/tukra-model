@@ -102,13 +102,13 @@ train/
     loss.py # all loss functions used in training
     train.py
     transforms.py # modified torchvision transforms
-    utils.py # useful functions and type hints
+    utils.py # useful functions and type definitions
 
 .gitignore
 config.yml # The config file for building the model, disc and loss
 main.py # for training the model without DDP
 parallel_main.py # for training the model with DDP
 readme.md
-requirements.txt # pip packages needed to run the model
+requirements.txt
 results.png
 ```
