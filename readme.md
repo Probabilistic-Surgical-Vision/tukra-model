@@ -4,11 +4,6 @@ This repository holds the code for a refactored version of the model proposed by
 
 ![Results from the model when trained on the Hamlyn Dataset using the Monodepth Loss](./results.png)
 
-## Model Description
-
-
-...
-
 ## Pre-requisites and installation
 
 To use this package, you will need Python 3.6 or higher. Using an NVIDIA GPU, such as an RTX6000 is recommended.
@@ -90,6 +85,7 @@ model/
     model.py
 
 scripts/
+    demo_train.sh # showcase the model training
     finetune_test.sh # example for finetuning model
     local_test.sh # test training without cuda
     macos_setup.sh # set up GPU training with MPS
@@ -98,7 +94,6 @@ scripts/
     rcs_parallel_job.rcs # train model using DDP on HPC
     rcs_serial_job.pbs # train model without DDP on HPC
     remove_model.sh # (paperspace only) delete package
-    serial_test.sh # example for training model
     slurm_job.sh # train model on SLURM
 
 train/

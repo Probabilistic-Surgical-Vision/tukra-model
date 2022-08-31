@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. venv/bin/activate
+
 python parallel_main.py config.yml da-vinci \
     --epochs 2 --adversarial \
     --training-size 16 --validation-size 16 \
