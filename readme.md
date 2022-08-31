@@ -57,8 +57,7 @@ Within the `train` package, there are modules for:
 
 To create the model, discriminator and loss functions, each class takes in keyword arguments. Therefore, it is possible to unpack a dictionary of the key values into the class constructor.
 
-This is used to create a single configuration file that can pass the dictionaries
-
+See the `config.yml` file for how to create the model architecture from kwargs.
 
 ## Repository Structure
 
